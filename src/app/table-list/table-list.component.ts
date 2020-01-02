@@ -41,6 +41,17 @@ export class TableListComponent implements OnInit {
   ngOnInit() {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
+
+      this.sort.sortChange.subscribe(x => {
+        console.log('sort changed:', x);
+        this.selection.clear();
+      });
+
+      this.paginator.page.subscribe(x => {
+        console.log('page size or index changed:', x);
+        this.selection.clear();
+      });
   }
 
   onAdd() {
@@ -49,6 +60,7 @@ export class TableListComponent implements OnInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     console.log(this.dataSource.filteredData);
+    this.selection.clear();
   }
 
  /** Whether the number of selected elements matches the total number of rows. */
@@ -70,8 +82,9 @@ export class TableListComponent implements OnInit {
 
 /** Selects all rows if they are not all selected; otherwise clear selection. */
 masterToggle() {
-  this.isAllSelected() ?
-    this.selection.clear() : this.selectRows();
+  const numSelected = this.selection.selected.length;
+  console.log('number selected:' + numSelected);
+  numSelected > 0 ? this.selection.clear() : this.selectRows();
 }
 
 selectRows() {
