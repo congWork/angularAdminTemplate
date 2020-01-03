@@ -1,0 +1,33 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span>{{title}}</span>
+    <!-- This fills the remaining space of the current row -->
+    <span class="fill-remaining-space"></span>
+    <span class="paddingLT">
+      <mat-form-field>
+        <input type="search" matInput placeholder="Search" (keyup)="onSearch($event.target.value)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </span>
+    <span class="paddingL">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onCommand(CommandType.add)">
+          <mat-icon>add</mat-icon>
+          <span>New</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item (click)="onCommand(CommandType.delete)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </span>
+
+  </mat-toolbar-row>
+</mat-toolbar>

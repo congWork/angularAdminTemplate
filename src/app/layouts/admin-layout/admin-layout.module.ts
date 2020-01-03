@@ -27,9 +27,11 @@ import {
   MatMenuModule,
   MatCheckboxModule
 } from '@angular/material';
+import { SharedModule } from 'app/shared/shared.module';
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     ReactiveFormsModule,

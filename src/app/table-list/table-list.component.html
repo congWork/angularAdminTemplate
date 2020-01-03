@@ -4,39 +4,7 @@
 
             <div class="col-md-12">
               <div class="mat-elevation-z8">
-                  <mat-toolbar>
-                    <mat-toolbar-row>
-                      <span>Doc Folder</span>
-                      <!-- This fills the remaining space of the current row -->
-                      <span class="fill-remaining-space"></span>
-                      <span class="paddingLT">
-                        <mat-form-field>
-                          <input type="search" matInput placeholder="Search" (keyup)="applyFilter($event.target.value)">
-                          <mat-icon matSuffix>search</mat-icon>
-                        </mat-form-field>
-                      </span>
-                      <span class="paddingL">
-                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                          <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                          <button mat-menu-item (click)='onAdd()'>
-                            <mat-icon>add</mat-icon>
-                            <span>New</span>
-                          </button>
-                          <button mat-menu-item disabled>
-                            <mat-icon>edit</mat-icon>
-                            <span>Edit</span>
-                          </button>
-                          <button mat-menu-item>
-                            <mat-icon>delete</mat-icon>
-                            <span>Delete</span>
-                          </button>
-                        </mat-menu>
-                      </span>
-                  
-                    </mat-toolbar-row>
-                  </mat-toolbar>
+              <app-table-toolbar [title]="tableName" (search)="onSearch($event)" (command)="onCommand($event)"></app-table-toolbar>
                   <table mat-table [dataSource]="dataSource" matSort>
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">

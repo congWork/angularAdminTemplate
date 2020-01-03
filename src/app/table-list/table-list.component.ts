@@ -3,6 +3,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
+import { Command } from 'app/shared/components/table-toolbar/table-toolbar.component';
 
 export interface PeriodicElement {
   name: string;
@@ -29,7 +30,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./table-list.component.css']
 })
 export class TableListComponent implements OnInit {
-
+tableName: string = 'Doc Folder';
   displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
@@ -54,10 +55,22 @@ export class TableListComponent implements OnInit {
       });
   }
 
-  onAdd() {
-    console.log(this.selection.selected);
+  onCommand(e: Command) {
+    switch (e) {
+      case Command.add:
+        console.log(e, this.selection.selected);
+        break;
+      case Command.delete:
+        console.log('delete command trigger');
+        break;
+      case Command.edit:
+          console.log('edit command trigger');
+          break;
+      default:
+        break;
+    }
   }
-  applyFilter(filterValue: string) {
+  onSearch(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     console.log(this.dataSource.filteredData);
     this.selection.clear();
