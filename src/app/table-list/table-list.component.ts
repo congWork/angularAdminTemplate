@@ -3,7 +3,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
-import { Command } from 'app/shared/components/table-toolbar/table-toolbar.component';
+import { TableToolBarCommand } from 'app/shared/components/table-toolbar/table-toolbar.component';
 
 export interface PeriodicElement {
   name: string;
@@ -31,6 +31,21 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class TableListComponent implements OnInit {
 tableName: string = 'Doc Folder';
+toolbarCommands: TableToolBarCommand[] = [{
+  name: 'add',
+  icon: 'add',
+  isDisabled: false
+},
+{
+  name: 'edit',
+  icon: 'edit',
+  isDisabled: true
+},
+{
+  name: 'delete',
+  icon: 'delete',
+  isDisabled: false
+}];
   displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
@@ -55,15 +70,15 @@ tableName: string = 'Doc Folder';
       });
   }
 
-  onCommand(e: Command) {
+  onCommand(e) {
     switch (e) {
-      case Command.add:
+      case 'add':
         console.log(e, this.selection.selected);
         break;
-      case Command.delete:
+      case 'delete':
         console.log('delete command trigger');
         break;
-      case Command.edit:
+      case 'edit':
           console.log('edit command trigger');
           break;
       default:

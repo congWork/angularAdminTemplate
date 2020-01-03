@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-export enum Command {
-  add,
-  edit,
-  delete
-};
+
+export interface TableToolBarCommand {
+  name: string;
+  icon: string;
+  isDisabled: boolean
+}
 
 @Component({
   selector: 'app-table-toolbar',
@@ -14,14 +15,17 @@ export class TableToolbarComponent implements OnInit {
 @Input()
 title: string;
 
+@Input()
+tableToolbarCommands: TableToolBarCommand[];
+
 @Output()
 search: EventEmitter<string> = new EventEmitter();
 
 @Output()
-command: EventEmitter<Command> = new EventEmitter();
+command: EventEmitter<string> = new EventEmitter();
 
 
-CommandType = Command;
+
   constructor() { }
 
   ngOnInit() {

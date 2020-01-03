@@ -14,18 +14,12 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onCommand(CommandType.add)">
-          <mat-icon>add</mat-icon>
-          <span>New</span>
+      
+        <button mat-menu-item *ngFor="let i of tableToolbarCommands" [disabled]="i.isDisabled" (click)="onCommand(i.name)">
+          <mat-icon>{{i.icon}}</mat-icon>
+          <span>{{i.name}}</span>
         </button>
-        <button mat-menu-item disabled>
-          <mat-icon>edit</mat-icon>
-          <span>Edit</span>
-        </button>
-        <button mat-menu-item (click)="onCommand(CommandType.delete)">
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
+       
       </mat-menu>
     </span>
 

@@ -4,7 +4,7 @@
 
             <div class="col-md-12">
               <div class="mat-elevation-z8">
-              <app-table-toolbar [title]="tableName" (search)="onSearch($event)" (command)="onCommand($event)"></app-table-toolbar>
+              <app-table-toolbar [title]="tableName" [tableToolbarCommands]="toolbarCommands" (search)="onSearch($event)" (command)="onCommand($event)"></app-table-toolbar>
                   <table mat-table [dataSource]="dataSource" matSort>
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="select">
