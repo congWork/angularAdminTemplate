@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export interface TableToolBarCommand {
   name: string;
@@ -12,28 +12,23 @@ export interface TableToolBarCommand {
   templateUrl: './table-toolbar.component.html',
   styleUrls: ['./table-toolbar.component.scss']
 })
-export class TableToolbarComponent implements OnInit {
-@Input()
-title: string;
+export class TableToolbarComponent {
+  @Input()
+  title: string;
 
-@Input()
-tableToolbarCommands: TableToolBarCommand[];
+  @Input()
+  tableToolbarCommands: TableToolBarCommand[];
 
-@Output()
-search: EventEmitter<string> = new EventEmitter();
+  @Output()
+  search: EventEmitter<string> = new EventEmitter();
 
-@Output()
-command: EventEmitter<Function> = new EventEmitter();
+  @Output()
+  command: EventEmitter<Function> = new EventEmitter();
 
-
-
-  constructor() { }
-
-  ngOnInit() {
-  }
   onCommand(e){
     this.command.emit(e)
   }
+
   onSearch(e) {
     this.search.emit(e);
   }
