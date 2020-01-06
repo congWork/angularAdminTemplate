@@ -30,21 +30,31 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./table-list.component.css']
 })
 export class TableListComponent implements OnInit {
+  
 tableName: string = 'Doc Folder';
 toolbarCommands: TableToolBarCommand[] = [{
   name: 'add',
-  icon: 'add',
-  isDisabled: false
+  matIcon: 'add',
+  isDisabled: false,
+  action: () => {
+    console.log('add', this.selection.selected);
+  }
 },
 {
   name: 'edit',
-  icon: 'edit',
-  isDisabled: true
+  matIcon: 'edit',
+  isDisabled: true,
+  action: () => {
+    console.log('delete');
+  }
 },
 {
   name: 'delete',
-  icon: 'delete',
-  isDisabled: false
+  matIcon: 'delete',
+  isDisabled: false,
+  action: () => {
+    console.log('delete');
+  }
 }];
   displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
@@ -69,21 +79,16 @@ toolbarCommands: TableToolBarCommand[] = [{
         this.selection.clear();
       });
   }
-
-  onCommand(e) {
-    switch (e) {
-      case 'add':
-        console.log(e, this.selection.selected);
-        break;
-      case 'delete':
-        console.log('delete command trigger');
-        break;
-      case 'edit':
-          console.log('edit command trigger');
-          break;
-      default:
-        break;
-    }
+ isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const page = this.dataSource.paginator.pageSize;
+  
+    const remainingSize = this.dataSource.filteredData.length -(this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize);
+  
+    return numSelected === remainingSize;
+  }
+  onCommand(e: Function) {
+    e.apply(this);
   }
   onSearch(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -91,42 +96,22 @@ toolbarCommands: TableToolBarCommand[] = [{
     this.selection.clear();
   }
 
- /** Whether the number of selected elements matches the total number of rows. */
- isAllSelected() {
-  const numSelected = this.selection.selected.length;
-  const page = this.dataSource.paginator.pageSize;
-  let endIndex: number;
-// First check whether data source length is greater than current page index multiply by page size.
-// If yes then endIdex will be current page index multiply by page size.
-// If not then select the remaining elements in current page only.
-  if (this.dataSource.data.length > (this.dataSource.paginator.pageIndex + 1) * this.dataSource.paginator.pageSize) {
-    endIndex = (this.dataSource.paginator.pageIndex + 1) * this.dataSource.paginator.pageSize;
-  } else {
-    // tslint:disable-next-line:max-line-length
-    endIndex = this.dataSource.data.length - (this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize);
-  }
-  return numSelected === endIndex;
-}
+
 
 /** Selects all rows if they are not all selected; otherwise clear selection. */
 masterToggle() {
-  const numSelected = this.selection.selected.length;
-  console.log('number selected:' + numSelected);
-  numSelected > 0 ? this.selection.clear() : this.selectRows();
+  this.isAllSelected() ? this.selection.clear() : this.selectRows();
 }
 
 selectRows() {
-  // tslint:disable-next-line:max-line-length
-  let endIndex: number;
-  // tslint:disable-next-line:max-line-length
-  if (this.dataSource.data.length > (this.dataSource.paginator.pageIndex + 1) * this.dataSource.paginator.pageSize) {
-    endIndex = (this.dataSource.paginator.pageIndex + 1) * this.dataSource.paginator.pageSize;
-  } else {
-    // tslint:disable-next-line:max-line-length
-    endIndex = this.dataSource.data.length;
-  }
+  const skip = this.dataSource.paginator.pageIndex * this.dataSource.paginator.pageSize;
+  const take = this.dataSource.paginator.pageSize;
 
-  const selectedData = this.dataSource.filteredData.slice(0, endIndex);
+  const currentData = this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort);
+
+  const selectedData = currentData.filter((v, k) => k >= skip).slice(0, take);
+
+  console.log('current page data:', selectedData);
   selectedData.forEach((x) => {
     this.selection.select(x);
   });

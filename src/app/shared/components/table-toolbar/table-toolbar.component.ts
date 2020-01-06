@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 export interface TableToolBarCommand {
   name: string;
-  icon: string;
-  isDisabled: boolean
+  matIcon: string;
+  isDisabled: boolean,
+  action: Function
 }
 
 @Component({
@@ -22,7 +23,7 @@ tableToolbarCommands: TableToolBarCommand[];
 search: EventEmitter<string> = new EventEmitter();
 
 @Output()
-command: EventEmitter<string> = new EventEmitter();
+command: EventEmitter<Function> = new EventEmitter();
 
 
 
@@ -30,9 +31,9 @@ command: EventEmitter<string> = new EventEmitter();
 
   ngOnInit() {
   }
-onCommand(e){
-  this.command.emit(e)
-}
+  onCommand(e){
+    this.command.emit(e)
+  }
   onSearch(e) {
     this.search.emit(e);
   }

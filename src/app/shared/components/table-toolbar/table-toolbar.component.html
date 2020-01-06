@@ -15,8 +15,8 @@
       </button>
       <mat-menu #menu="matMenu">
       
-        <button mat-menu-item *ngFor="let i of tableToolbarCommands" [disabled]="i.isDisabled" (click)="onCommand(i.name)">
-          <mat-icon>{{i.icon}}</mat-icon>
+        <button mat-menu-item *ngFor="let i of tableToolbarCommands" [disabled]="i.isDisabled" (click)="onCommand(i.action)">
+          <mat-icon>{{i.matIcon}}</mat-icon>
           <span>{{i.name}}</span>
         </button>
        
