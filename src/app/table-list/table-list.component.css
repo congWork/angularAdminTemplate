@@ -5,3 +5,11 @@ table {
   .mat-column-select {
     overflow: initial;
   }
+
+  tr.table-element-row:hover {
+    background-color: #eee;
+  }
+
+  tr.table-element-row:active {
+    background: #efefef;
+  }

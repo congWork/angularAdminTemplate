@@ -25,7 +25,7 @@ export class TableToolbarComponent {
   @Output()
   command: EventEmitter<Function> = new EventEmitter();
 
-  onCommand(e){
+  onCommand(e) {
     this.command.emit(e)
   }
 
