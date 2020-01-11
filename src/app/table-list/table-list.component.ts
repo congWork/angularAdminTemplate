@@ -4,26 +4,17 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {SelectionModel} from '@angular/cdk/collections';
 import { TableToolBarCommand } from 'app/shared/components/table-toolbar/table-toolbar.component';
+import { DocFolderService } from './services/doc-folder.service';
+import { environment } from 'environments/environment';
 
 export interface PeriodicElement {
+  id: string,
   name: string;
   position: number;
   weight: number;
   symbol: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 @Component({
   selector: 'app-table-list',
@@ -56,17 +47,29 @@ export class TableListComponent implements OnInit {
       console.log('delete');
     }
   }];
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol','edit'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['select','position', 'name', 'weight', 'symbol','edit'];
+  dataSource = new MatTableDataSource<PeriodicElement>([]);
   selection = new SelectionModel<PeriodicElement>(true, []);
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  constructor() {
+
+  docFolders: PeriodicElement[];
+  constructor(private docFolderService: DocFolderService) {
   }
 
   ngOnInit() {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    console.log(environment.production);
+    this.docFolderService.makeRealOnlineApiCall().subscribe(x => {
+      
+    });
+
+    this.docFolderService.getAll().subscribe(x => {
+       this.docFolders = x;
+       console.log('all doc folders:', this.docFolders);
+       this.dataSource = new MatTableDataSource<PeriodicElement>(this.docFolders);
+       this.dataSource.paginator = this.paginator;
+       this.dataSource.sort = this.sort;
+    });
 
       this.sort.sortChange.subscribe(x => {
         console.log('sort changed:', x);
@@ -79,7 +82,11 @@ export class TableListComponent implements OnInit {
       });
   }
   onEdit(row: PeriodicElement) {
-    console.log('onEdit:',row);
+    console.log('onEdit:', row);
+    row.name = 'update by cong';
+    this.docFolderService.updateHero(row).subscribe(x => {
+      console.log('updated', x);
+    });
   }
 
   isAllSelected() {
